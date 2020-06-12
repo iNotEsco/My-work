@@ -1,0 +1,201 @@
+package assg7_Escobar;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
+
+
+public class FlightMap implements FlightMapInterface {
+
+
+	public ArrayList<LinkedList<City>> flightMap;
+	/**
+	 * Creates an empty FlightMap
+	 */
+	public FlightMap() {
+		flightMap = new ArrayList<LinkedList<City>>();
+	}
+
+
+	public void loadFlightMap(String cityFileName, String flightFileName)
+			throws FileNotFoundException {
+		Scanner cityFile = null;
+		Scanner flightFile = null;
+		try {
+			cityFile = new Scanner(new File(cityFileName));
+			flightFile = new Scanner(new File(flightFileName));
+		} catch (FileNotFoundException e) {
+			System.out.println("ERROR: Can not open " + cityFileName + " or " +
+					flightFileName + " for reading.");
+			System.exit(1);   
+		}
+
+		while(cityFile.hasNextLine()){
+			LinkedList<City> temp = new LinkedList<City>();
+			temp.add(new City(cityFile.nextLine()));
+			flightMap.add(temp);
+		}
+		cityFile.close();
+
+		while(flightFile.hasNextLine()){
+			String[] parts = flightFile.nextLine().split("\\s+");
+			insertAdjacent(new City(parts[0]),new City(parts[1]));
+
+		}
+		flightFile.close();
+
+	}
+
+
+	public void insertAdjacent(City aCity, City adjCity) {
+		Iterator<LinkedList<City>> iter = flightMap.iterator();
+		while(iter.hasNext()){
+			LinkedList<City> tempList = iter.next();
+			City tempCity = tempList.element();
+			if(tempCity.getName().equals(aCity.getName())){
+				tempList.add(adjCity);
+				break;
+			}
+
+		}
+	}
+
+
+	public void displayFlightMap() {
+		Iterator<LinkedList<City>> iter = flightMap.iterator();
+		while(iter.hasNext()){
+			displayAdjacentCities(iter.next().element());
+		}
+	}
+
+
+	public void displayAllCities() {
+		Iterator<LinkedList<City>> iter = flightMap.iterator();
+		System.out.print("All of the Cities:\n");		
+		while(iter.hasNext()){
+			System.out.print(iter.next().element() + "\n");
+		}
+	}
+
+
+	public void displayAdjacentCities(City aCity) {
+		Iterator<LinkedList<City>> iter = flightMap.iterator();
+		while(iter.hasNext()){
+			LinkedList<City> tempList = iter.next();
+			City tempCity = tempList.element();
+			if(tempCity.equals(aCity)){
+				Iterator<City> tempI = tempList.iterator();
+				if(tempI.hasNext()){
+					System.out.print("Origin City: " + tempI.next() + "\t\tServes: ");
+				}
+				while(tempI.hasNext()){
+					System.out.print(tempI.next());
+					if(tempI.hasNext()){
+						System.out.print(", ");
+					}
+				}
+				System.out.print("\n");
+			}
+
+		}
+
+	}
+
+
+	public void markVisited(City aCity) {
+		Iterator<LinkedList<City>> iter = flightMap.iterator();
+		while(iter.hasNext()){
+			City tempCity = iter.next().element();
+			if(tempCity.equals(aCity)){
+				tempCity.visit();
+			}
+		}
+	}
+
+
+	public void unVisitAll() {
+		Iterator<LinkedList<City>> iter = flightMap.iterator();
+		while(iter.hasNext()){
+			iter.next().element().clear();
+		}
+	}
+
+
+	public boolean isVisited(City aCity) {
+		Iterator<LinkedList<City>> iter = flightMap.iterator();
+		while(iter.hasNext()){
+			City tempCity = iter.next().element();
+			if(tempCity.equals(aCity)){
+				return tempCity.isVisited();
+			}
+		}
+		return false;
+	}
+
+
+	public City getNextCity(City aCity) {
+		Iterator<LinkedList<City>> iterList = flightMap.iterator();
+		while(iterList.hasNext()){
+			LinkedList<City> tempList = iterList.next();
+			if(tempList.element().equals(aCity)){
+				Iterator<City> iterCity = tempList.iterator();
+				if(iterCity.hasNext()){
+					iterCity.next();
+				}
+				while(iterCity.hasNext()){
+					City tempCity = iterCity.next();
+					if(!tempCity.isVisited()){
+						return tempCity;
+					}
+				}
+
+			}
+		}
+		return null;
+	}
+
+
+	public boolean servesCity(City aCity) {
+		//Iterator<LinkedList<City>> iter = 
+		return false;
+	}
+
+
+	public LinkedList<City> getPath(City originCity, City destinationCity) {
+		Stack<City> stack = new Stack<City>();
+		City topCity, nextCity;
+		unVisitAll();
+
+
+		stack.push(originCity);
+		markVisited(originCity);
+
+		topCity = (City) (stack.peek());
+		while(!stack.isEmpty() && !topCity.equals(destinationCity)){
+			nextCity = getNextCity(topCity);
+			if(nextCity == null){
+				stack.pop();
+			}
+			else{
+				stack.push(nextCity);
+				markVisited(nextCity);
+			}
+			topCity = (City) stack.peek();
+		}
+		if(stack.isEmpty()){
+			return null;
+		}
+		else {
+			Stack<City> reversedStack = new Stack<City>();
+			while(!stack.isEmpty()){
+				reversedStack.push(stack.pop());
+			}
+			LinkedList<City> path = new LinkedList<City>();
+			while(!reversedStack.isEmpty()){
+				path.add(reversedStack.pop());
+			}
+			return path;
+		}
+	}
+
+}

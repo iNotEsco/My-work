@@ -1,0 +1,23 @@
+package assg7_Escobar;
+
+import java.io.FileNotFoundException;
+import java.util.*;
+
+public class DeterminePaths {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		FlightMap FM = new FlightMap();
+		FM.loadFlightMap("cityFile.txt", "flightFile.txt");
+		FM.displayFlightMap();
+		Iterator<LinkedList<City>> iter = FM.flightMap.iterator();
+		System.out.print(FM.isVisited(new City("Q")));
+		while(iter.hasNext()){
+			FM.markVisited(iter.next().element());;
+		}
+		System.out.print(FM.isVisited(new City("Q")));
+		FM.unVisitAll();
+		System.out.print(FM.isVisited(new City("Q")));
+
+	}
+
+}

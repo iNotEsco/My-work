@@ -1,0 +1,26 @@
+package assg7_Escobar;
+
+import java.io.*;
+import java.util.*;
+
+public class DeterminePaths {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		FlightMap FM = new FlightMap();
+		FM.loadFlightMap("cityFile.txt", "flightFile.txt");
+		Scanner reqFile = new Scanner (new File("requestFile.txt"));
+		while(reqFile.hasNextLine()){
+			String[] parts = reqFile.nextLine().split("\\s+");
+			LinkedList<City> path = new LinkedList<City>();
+			path = FM.getPath(new City(parts[0]), new City(parts[1]));
+			if(!path.isEmpty()){
+				System.out.print("Flight from " + parts[0] + " to " + parts[1] + ": " + path.pop());
+				while(!path.isEmpty()){
+					System.out.print(" -> " + path.pop());
+				}
+			}
+		}
+		reqFile.close();
+	}
+
+}

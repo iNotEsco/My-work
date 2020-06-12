@@ -1,0 +1,22 @@
+package assg7_Escobar;
+
+import java.io.FileNotFoundException;
+
+public class DeterminePaths {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		FlightMap FM = new FlightMap();
+			FM.loadFlightMap("cityFile.txt", "flightFile.txt");
+		
+			FM.displayAdjacentCities(new City("Q"));
+			FM.displayAdjacentCities(new City("X"));
+			FM.displayAdjacentCities(new City("R"));
+			FM.displayAdjacentCities(new City("P"));
+			FM.displayAdjacentCities(new City("W"));
+			FM.displayAdjacentCities(new City("S"));
+			FM.displayAdjacentCities(new City("T"));
+			FM.displayAdjacentCities(new City("Y"));
+			FM.displayAdjacentCities(new City("Z"));
+	}
+
+}

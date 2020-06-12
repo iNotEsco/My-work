@@ -1,0 +1,47 @@
+package assg7_Escobar;
+
+public class Stack<E> implements StackInterface<E> {
+
+	private Node<E> top;
+
+	/**
+	 * Creates an empty stack
+	 */
+	public Stack() {
+		top = null;
+	}
+
+
+	public boolean isEmpty() {
+		return top == null;
+	}
+
+	public void popAll() {
+		top = null;
+	}
+
+
+	public void push(E newItem) throws StackException {
+		top = new Node<E>(newItem, top);
+	}
+
+	public E pop() throws StackException {
+		if(!this.isEmpty()){
+			Node<E> temp = top;
+			top = top.getNext();
+			return temp.getItem();
+		}
+		else{
+			throw new StackException("Stack Exception on pop: Stack is empty.");	
+		}
+	}
+
+	public E peek() throws StackException {
+		if(!this.isEmpty()){
+			return top.getItem();
+		}
+		else{
+			throw new StackException("Stack Exception on peek: Stack is empty.");	
+		}	
+	}
+}

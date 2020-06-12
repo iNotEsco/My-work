@@ -1,0 +1,83 @@
+package assg9_Escobar;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class PhoneBook{
+
+	private	BinarySearchTree<Person, String> book;
+
+	public PhoneBook(){
+
+		book = new BinarySearchTree<Person, String>();
+
+	}
+	public BinaryTree<Person> getBT(){
+		return book;
+	}
+	public static void insert(BinaryTree<Person> b, Person p){
+		
+		
+		/*BinaryTree<Person> temp = b;
+		if(!temp.isEmpty()){
+			if (temp.getRootItem().getName().compareTo(p.getName()) < 0 ){
+				if (temp.root.rightChild == null){
+					temp.attachRightSubtree(new BinaryTree<Person>(p));	
+				}
+				else{
+					insert(temp.peekRightSubtree(),p);
+				}
+			}
+			else{
+				if (temp.root.leftChild == null){
+					temp.attachLeftSubtree(new BinaryTree<Person>(p));	
+				}
+				else{
+					insert(temp.peekLeftSubtree(),p);
+				}
+			}
+		}
+		else{
+			temp.setRootItem(p);
+		}*/
+	}
+
+	public void loadBook(){
+		loadTree(book);
+	}
+	private static void loadTree(BinaryTree<Person> b){
+		Scanner input = null;
+		try {
+			input = new Scanner(new File("phoneBook.txt"));
+		} catch (FileNotFoundException e) {
+			System.out.print("ERROR: Can not read file \"phoneBook.txt\" for input");
+			System.exit(1);
+		}
+		while(input.hasNextLine()){
+			String[] parts = input.nextLine().split("\\s+");
+			insert(b, new Person(parts[0] + " " + parts[1], parts[2]));
+		}
+	}
+
+	public void printBook(){
+		printTree(book);
+		System.out.println("\n");
+	}
+	public static void printTree(BinaryTree<Person> b){
+		System.out.print("( ");
+		if(!b.isEmpty()){
+			if(b.root.leftChild != null){
+				printTree(b.peekLeftSubtree());
+			}
+
+			System.out.print(" , " + b.getRootItem() + " , ");
+
+			if(b.root.rightChild != null){
+				printTree(b.peekRightSubtree());
+			}	
+			System.out.print(" )");
+		}
+	}
+
+}

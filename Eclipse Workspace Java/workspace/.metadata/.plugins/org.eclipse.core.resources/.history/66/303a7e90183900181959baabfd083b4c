@@ -1,0 +1,25 @@
+package assg8_Escobar;
+
+public class Event {
+
+	private int arrival, processingTime;
+
+	public Event(int a, int p){
+		arrival = a;
+		processingTime = p;
+	}
+
+	public int getArrival(){
+		return arrival;
+	}
+	public void setArrival(int a){
+		arrival = a;
+	}
+	public int getTime(){
+		return processingTime;
+	}
+	public void setProcessingTime(int pt){
+		processingTime = pt;
+	}
+
+}
